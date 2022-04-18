@@ -1,20 +1,45 @@
 let num = [];
-function adicionar() {
-  let valorDigitado = Number(document.querySelector("#num").value);
-  let sel = document.querySelector("#selNum");
-  let res = document.querySelector("#res");
+let valorDigitado = document.querySelector("#num");
+let sel = document.querySelector("#selNum");
+let res = document.querySelector("#res");
 
-  if (valorDigitado < 1 || valorDigitado > 100 || !valorDigitado) {
-    alert("[ERRO!] Por favor digite um valor válido.");
+function isNumero(n) {
+  if (Number(n) >= 1 && Number(n) <= 100) {
+    return true;
   } else {
+    return false;
+  }
+}
+
+function inLista(n, l) {
+  if (l.indexOf(Number(n)) != -1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function adicionar() {
+  if (isNumero(valorDigitado.value) && !inLista(valorDigitado.value, num)) {
+    num.push(Number(valorDigitado.value));
     let item = document.createElement("option");
-    num.push(valorDigitado);
-    item.text = `Valor ${valorDigitado} adicionado`;
+    item.text = `Valor ${valorDigitado.value} adicionado`;
     sel.appendChild(item);
-    console.log(num);
+    res.innerHTML = "";
+  } else {
+    alert("[ERRO] Valor inválido, ou já encontrado na lista.");
+  }
+  valorDigitado.value = "";
+  valorDigitado.focus();
+}
+
+function finalizar() {
+  if (num.length == 0) {
+    alert("[ERRO]Por favor, insira valores antes de começar");
+  } else {
     var max = num.reduce(function (a, b) {
       return Math.max(a, b);
-    }, -Infinity);
+    });
 
     var min = num.reduce(function (a, b) {
       return Math.min(a, b);
@@ -23,15 +48,13 @@ function adicionar() {
     for (var i = 0; i < num.length; i++) {
       soma += num[i];
     }
+
+    res.innerHTML = `<p>Ao todo, temos ${num.length} números cadastrados.</p>
+      <p>O maior valor digitado foi ${max}</p>
+      <p>O menor valor digitado foi ${min}</p>
+      <p>A soma de todos os valores é de ${soma}
+      <p>A média dos valores digitados é ${soma / num.length}</p>`;
   }
 }
 
-
-function finalizar(res,num,max,min,soma) {
-    res.innerHTML = `<p>Ao todo, temos ${num.length} números cadastrados.</p>
-    <p>O maior valor digitado foi ${max}</p>
-    <p>O menor valor digitado foi ${min}</p>
-    <p>A soma de todos os valores é de ${soma}
-    <p>A média dos valores digitados é ${soma / num.length}</p>`;
-  }
-  
+//=======================================
